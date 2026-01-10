@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "uR8CWPO7X2IQvBa33uaGgMl1s2s+xklvvrjZAzNXsRQ=",
+  "Source": "AiTripPlanner.Api",
+  "BasePath": "_content/AiTripPlanner.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
