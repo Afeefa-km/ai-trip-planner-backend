@@ -24,15 +24,6 @@ public class TripPlannerController : ControllerBase
             var result = await _tripPlannerService.CreateTripPlanAsync(request);
             return Ok(result);
         }
-        catch (HttpRequestException ex)
-        {
-            return StatusCode(502, new 
-            { 
-                error = "External API Error",
-                message = "Failed to communicate with the AI service.",
-                details = ex.Message
-            });
-        }
         catch (Exception ex)
         {
             return StatusCode(500, new 

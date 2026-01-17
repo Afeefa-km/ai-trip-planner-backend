@@ -29,12 +29,11 @@ public class OpenAIService : IAIProviderService
             }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Post, _aiSettings.BaseUrl);
-        
-        // Authorization header
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _aiSettings.ApiKey);
-        
-        // REQUIRED by OpenRouter
+        using var request = new HttpRequestMessage(HttpMethod.Post, _aiSettings.BaseUrl);
+        request.Headers.Authorization =
+            new AuthenticationHeaderValue("Bearer", _aiSettings.ApiKey);
+
+        // OpenRouter required headers
         request.Headers.Add("HTTP-Referer", "http://localhost:5187");
         request.Headers.Add("X-Title", "AI Trip Planner");
 
@@ -43,22 +42,21 @@ public class OpenAIService : IAIProviderService
             Encoding.UTF8,
             "application/json");
 
-        var response = await _httpClient.SendAsync(request);
+        using var response = await _httpClient.SendAsync(request);
 
+        var content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
-        {
-            var error = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"OpenRouter API error ({response.StatusCode}): {error}");
-        }
+            throw new HttpRequestException(
+                $"OpenRouter error ({response.StatusCode}): {content}");
 
-        var json = await response.Content.ReadAsStringAsync();
-        using var doc = JsonDocument.Parse(json);
+        using var doc = JsonDocument.Parse(content);
 
-        return doc
-            .RootElement
+        return doc.RootElement
             .GetProperty("choices")[0]
             .GetProperty("message")
             .GetProperty("content")
             .GetString()!;
     }
 }
+
+

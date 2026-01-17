@@ -5,4 +5,5 @@ namespace TripPlanner.Api.Services.Interfaces;
 public interface ITripPlannerService
 {
     Task<TripPlanResponse> CreateTripPlanAsync(TripPlanRequest request);
+    Task<string> GenerateAiTripPlan(TripPlanRequest request);
 }
